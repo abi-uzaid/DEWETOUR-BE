@@ -129,50 +129,50 @@ func (h *handlerAuth) CheckAuth(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": dto.SuccessResult{Code: http.StatusOK, Data: CheckAuthResponse}})
 }
 
-func (h *handlerAuth) LoginAdmin(c *gin.Context) {
-	var request authdto.LoginRequest
+// func (h *handlerAuth) LoginAdmin(c *gin.Context) {
+// 	var request authdto.LoginRequest
 
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+// 	if err := c.ShouldBindJSON(&request); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
 
-	user := models.User{
-		Email:    request.Email,
-		Password: request.Password,
-		Role:     "admin",
-	}
+// 	user := models.User{
+// 		Email:    request.Email,
+// 		Password: request.Password,
+// 		Role:     "admin",
+// 	}
 
-	user, err := h.AuthRepository.Login(user.Email)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Email not found"})
-		return
-	}
+// 	user, err := h.AuthRepository.Login(user.Email)
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Email not found"})
+// 		return
+// 	}
 
-	// Check Pass
-	isValid := bcrypt.CheckPasswordHash(request.Password, user.Password)
-	if !isValid {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Password wrong"})
-		return
-	}
+// 	// Check Pass
+// 	isValid := bcrypt.CheckPasswordHash(request.Password, user.Password)
+// 	if !isValid {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Password wrong"})
+// 		return
+// 	}
 
-	//Generate Token
-	claims := jwt.MapClaims{}
-	claims["id"] = user.ID
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix() // 24 jam expired
+// 	//Generate Token
+// 	claims := jwt.MapClaims{}
+// 	claims["id"] = user.ID
+// 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix() // 24 jam expired
 
-	token, errGenerateToken := jwtToken.GenerateToken(claims)
-	if errGenerateToken != nil {
-		c.Error(errGenerateToken)
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-		return
-	}
+// 	token, errGenerateToken := jwtToken.GenerateToken(claims)
+// 	if errGenerateToken != nil {
+// 		c.Error(errGenerateToken)
+// 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+// 		return
+// 	}
 
-	loginResponse := authdto.LoginResponse{
-		Email: user.Email,
-		Token: token,
-		Role:  "admin",
-	}
+// 	loginResponse := authdto.LoginResponse{
+// 		Email: user.Email,
+// 		Token: token,
+// 		Role:  "admin",
+// 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": dto.SuccessResult{Code: http.StatusOK, Data: loginResponse}})
-}
+// 	c.JSON(http.StatusOK, gin.H{"data": dto.SuccessResult{Code: http.StatusOK, Data: loginResponse}})
+// }

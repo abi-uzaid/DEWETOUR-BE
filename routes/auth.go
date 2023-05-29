@@ -15,6 +15,6 @@ func AuthRoutes(r *gin.RouterGroup) {
 
 	r.POST("/register", Handlers.Register)
 	r.POST("/login", Handlers.Login)
-	r.POST("/login-admin", Handlers.LoginAdmin)
+	// r.POST("/login-admin", Handlers.LoginAdmin)
 	r.GET("/check-auth", middleware.Auth(Handlers.CheckAuth))
 }
