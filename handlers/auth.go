@@ -49,7 +49,7 @@ func (h *handlerAuth) Register(c *gin.Context) {
 		Password: password,
 		Phone:    request.Phone,
 		Address:  request.Address,
-		Role:     "user",
+		Role:     request.Role,
 	}
 
 	data, err := h.AuthRepository.Register(user)
@@ -102,7 +102,7 @@ func (h *handlerAuth) Login(c *gin.Context) {
 	loginResponse := authdto.LoginResponse{
 		Email: user.Email,
 		Token: token,
-		Role:  "user",
+		Role:  user.Role,
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": dto.SuccessResult{Code: http.StatusOK, Data: loginResponse}})
